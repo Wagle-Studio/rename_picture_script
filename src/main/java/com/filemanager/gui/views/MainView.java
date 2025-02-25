@@ -5,6 +5,7 @@ import org.controlsfx.control.CheckComboBox;
 import com.filemanager.gui.interactors.MainInteractor;
 import com.filemanager.gui.models.StrategyChoice;
 import com.filemanager.services.renaming.enums.FileExtension;
+import com.filemanager.services.renaming.enums.FormatPattern;
 
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -27,9 +28,13 @@ public final class MainView extends BaseView {
     @FXML
     private ChoiceBox<StrategyChoice> choiceBoxSelectStrategy;
     @FXML
-    private Button buttonStartAnalyse;
-    @FXML
     private CheckComboBox<FileExtension> comboBoxSelectedExtensions;
+    @FXML
+    private VBox fieldFormatPattern;
+    @FXML
+    private ChoiceBox<FormatPattern> choiceBoxSelectFormatPattern;
+    @FXML
+    private Button buttonStartAnalyse;
 
     public MainView(MainInteractor interactor) {
         super(PATH, TITLE);
@@ -40,6 +45,7 @@ public final class MainView extends BaseView {
     public void build() {
         this.initializeStrategyChoiceBox();
         this.initializeExtensionComboBox();
+        this.initializeFormatPatternChoiceBox();
         dropBox.setOnMouseClicked(event -> this.handleFileSearch());
         buttonStartAnalyse.setOnAction(event -> this.handleStartAnalyse());
     }
@@ -73,6 +79,7 @@ public final class MainView extends BaseView {
                 this.interactor.resetStrategyChoice();
             }
 
+            updateFormatChoiceBox();
             updateStartButtonState();
         });
     }
@@ -89,6 +96,18 @@ public final class MainView extends BaseView {
 
             updateStartButtonState();
         });
+    }
+
+    private void initializeFormatPatternChoiceBox() {
+        choiceBoxSelectFormatPattern.getItems().addAll(this.interactor.getFormatPatternChoices());
+
+        choiceBoxSelectFormatPattern.getSelectionModel().selectedItemProperty().addListener((observale, oldValue, newValue) -> {
+            this.interactor.handleFormatPatternChoice(newValue);
+        });
+    }
+
+    private void updateFormatChoiceBox() {
+        fieldFormatPattern.setVisible(this.interactor.strategyIsFormatByPattern());
     }
 
     private void updateStartButtonState() {

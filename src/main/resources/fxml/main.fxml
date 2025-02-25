@@ -44,6 +44,17 @@
                         <ChoiceBox fx:id="choiceBoxSelectStrategy" prefHeight="34.0" prefWidth="550.0" />
                      </children>
                   </VBox>
+                  <VBox fx:id="fieldFormatPattern" layoutX="10.0" layoutY="10.0" spacing="24.0" visible="false">
+                     <children>
+                        <Label text="Select the pattern">
+                           <styleClass>
+                              <String fx:value="title-4" />
+                              <String fx:value="text-bold" />
+                           </styleClass>
+                        </Label>
+                        <ChoiceBox fx:id="choiceBoxSelectFormatPattern" prefHeight="34.0" prefWidth="550.0" />
+                     </children>
+                  </VBox>
                   <VBox layoutX="10.0" layoutY="10.0" spacing="24.0">
                      <children>
                         <Label text="Select file extensions to target">

@@ -9,11 +9,12 @@ import java.util.Optional;
 import com.drew.metadata.Metadata;
 import com.filemanager.models.ProcessingFile;
 import com.filemanager.models.enums.FileStatus;
+import com.filemanager.services.renaming.BaseRenameStrategy;
 import com.filemanager.services.renaming.RenameStrategy;
 import com.filemanager.services.renaming.enums.FileExtension;
 import com.filemanager.utils.FileUtils;
 
-public class RenameByDate implements RenameStrategy {
+public class RenameByDate extends BaseRenameStrategy {
 
     private final String displayName = "Rename by date";
 

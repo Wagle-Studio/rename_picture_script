@@ -6,10 +6,12 @@ import java.util.function.Consumer;
 
 import com.filemanager.gui.models.StrategyChoice;
 import com.filemanager.models.ProcessingTask;
-import com.filemanager.services.renaming.RenameStrategy;
+import com.filemanager.services.renaming.BaseRenameStrategyWithParams;
 import com.filemanager.services.renaming.RenameStrategyFactory;
 import com.filemanager.services.renaming.enums.FileExtension;
+import com.filemanager.services.renaming.enums.FormatPattern;
 import com.filemanager.services.renaming.enums.StrategyType;
+import com.filemanager.services.renaming.strategies.RenameByFormatPattern;
 
 import javafx.collections.FXCollections;
 import javafx.stage.DirectoryChooser;
@@ -43,13 +45,13 @@ public final class MainInteractor {
     public List<StrategyChoice> getStrategyChoices() {
         return FXCollections.observableArrayList(
                 new StrategyChoice("Rename with a random name (UUID)", StrategyType.RANDOM),
-                new StrategyChoice("Rename by original creation date", StrategyType.BY_DATE)
+                new StrategyChoice("Rename by original creation date", StrategyType.BY_DATE),
+                new StrategyChoice("Rename with a defined format", StrategyType.BY_FORMAT_PATTERN)
         );
     }
 
     public void handleStrategyChoice(StrategyChoice choice) {
-        RenameStrategy strategy = RenameStrategyFactory.getStrategy(choice.getValue());
-        this.task.setStrategy(strategy);
+        this.task.setStrategy(RenameStrategyFactory.getStrategy(choice.getValue()));
     }
 
     public void resetStrategyChoice() {
@@ -70,6 +72,20 @@ public final class MainInteractor {
 
     public List<FileExtension> getSelectedExtensions() {
         return this.task.getExtensions();
+    }
+
+    public FormatPattern[] getFormatPatternChoices() {
+        return FormatPattern.values();
+    }
+
+    public Boolean strategyIsFormatByPattern() {
+        return this.task.getStrategy() instanceof RenameByFormatPattern;
+    }
+
+    public void handleFormatPatternChoice(FormatPattern formatPattern) {
+        if (this.task.getStrategy() instanceof BaseRenameStrategyWithParams strategy) {
+            strategy.setFormatPattern(formatPattern);
+        }
     }
 
     public Boolean analysisRequirementsAreValid() {

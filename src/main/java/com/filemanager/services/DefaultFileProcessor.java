@@ -6,6 +6,7 @@ import java.util.List;
 import com.filemanager.models.ProcessingFile;
 import com.filemanager.models.ProcessingTask;
 import com.filemanager.models.enums.TaskStatus;
+import com.filemanager.services.renaming.BaseRenameStrategyWithParams;
 import com.filemanager.services.renaming.RenameStrategy;
 import com.filemanager.utils.FileUtils;
 
@@ -13,6 +14,13 @@ public class DefaultFileProcessor implements FileProcessor {
 
     @Override
     public void analyse(ProcessingTask task) {
+        task.setStatus(TaskStatus.SETTING, "Setting task");
+
+        if (task.getStrategy() instanceof BaseRenameStrategyWithParams strategy && !strategy.validateStrategyParams()) {
+            task.setStatus(TaskStatus.ERROR, "Missing parameters for the selected strategy");
+            return;
+        }
+
         task.setStatus(TaskStatus.ANALYZING, "Analyzing folder");
 
         List<File> folderContent = FileUtils.getFolderContent(task.getFolderPath());
